@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getAuth, onAuthStateChanged, signOut as firebaseSignOut, User } from 'firebase/auth';
+import { getAuth, onIdTokenChanged, signOut as firebaseSignOut, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 
@@ -17,8 +17,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onIdTokenChanged(auth, async (user) => {
+        if (user) {
+            setUser(user);
+            const token = await user.getIdToken();
+            await fetch('/api/auth/session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+        } else {
+            setUser(null);
+             await fetch('/api/auth/session', {
+                method: 'DELETE',
+            });
+        }
     });
 
     return () => unsubscribe();
