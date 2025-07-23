@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { suggestBudgetAllocations, SuggestBudgetAllocationsOutput } from '@/ai/flows/suggest-budget-allocations';
 import type { Expense } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/components/theme-provider';
 
 interface AiBudgetSuggesterProps {
   expenses: Expense[];
