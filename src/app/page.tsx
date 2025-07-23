@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Expense, Category, SuggestedAllocation } from '@/lib/types';
+import type { Expense } from '@/lib/types';
 import { mockIncome } from '@/lib/data';
 import { useAuth } from '@/context/auth-context';
 import { getExpenses } from '@/services/expenses';
 
-import { DollarSign, CreditCard, Banknote, Landmark, Loader2 } from 'lucide-react';
+import { DollarSign, CreditCard, Landmark, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { OverviewCards } from '@/components/dashboard/overview-cards';
 import { ExpenseChart } from '@/components/dashboard/expense-chart';
 import { RecentExpenses } from '@/components/dashboard/recent-expenses';
 import { AiBudgetSuggester } from '@/components/dashboard/ai-budget-suggester';
