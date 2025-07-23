@@ -40,7 +40,7 @@ export function ExpenseChart({ expenses }: ExpenseChartProps) {
           fontSize={12}
           tickLine={false}
           axisLine={false}
-          tickFormatter={(value) => `$${value}`}
+          tickFormatter={(value) => `KES ${value}`}
         />
         <Tooltip
             cursor={{fill: 'hsl(var(--muted))'}}

@@ -113,12 +113,12 @@ export const columns = ({ deleteExpense, editExpense }: ColumnsProps): ColumnDef
     },
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"))
-      const formatted = new Intl.NumberFormat("en-KE", {
+      const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "KES",
       }).format(amount)
  
-      return <div className="text-right font-medium">{formatted}</div>
+      return <div className="text-right font-medium">{formatted.replace("KES", "KES ")}</div>
     },
   },
   {

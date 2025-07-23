@@ -115,7 +115,7 @@ export default function DashboardPage() {
             </Dialog>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${income.toLocaleString()}</div>
+            <div className="text-2xl font-bold">KES {income.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">Your total income for this period.</p>
           </CardContent>
         </Card>
@@ -125,7 +125,7 @@ export default function DashboardPage() {
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalExpenses.toLocaleString()}</div>
+            <div className="text-2xl font-bold">KES {totalExpenses.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               {income > 0 ? ((totalExpenses / income) * 100).toFixed(2) : 0}% of income
             </p>
@@ -137,7 +137,7 @@ export default function DashboardPage() {
             <Landmark className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${balance.toLocaleString()}</div>
+            <div className="text-2xl font-bold">KES {balance.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">Your remaining balance.</p>
           </CardContent>
         </Card>

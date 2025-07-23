@@ -91,7 +91,7 @@ export function AiBudgetSuggester({ expenses, income }: AiBudgetSuggesterProps) 
               <AccordionTrigger>
                 <div className="flex justify-between w-full pr-4">
                   <span>{item.category}</span>
-                  <span className="text-primary font-semibold">${item.amount.toLocaleString()} ({item.percentage}%)</span>
+                  <span className="text-primary font-semibold">KES {item.amount.toLocaleString()} ({item.percentage}%)</span>
                 </div>
               </AccordionTrigger>
               <AccordionContent>{item.justification}</AccordionContent>
