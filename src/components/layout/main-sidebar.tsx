@@ -12,11 +12,14 @@ import {
 } from '@/components/ui/sidebar';
 import { UserNav } from './user-nav';
 import { ThemeToggle } from '../theme-toggle';
-import { LayoutDashboard, Wallet, BarChart } from 'lucide-react';
+import { LayoutDashboard, Wallet, BarChart, LogOut } from 'lucide-react';
 import { Separator } from '../ui/separator';
+import { useAuth } from '@/context/auth-context';
+import { Button } from '../ui/button';
 
 export function MainSidebar() {
   const pathname = usePathname();
+  const { user, signOut } = useAuth();
 
   const menuItems = [
     {
@@ -42,25 +45,34 @@ export function MainSidebar() {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
-          {menuItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton
-                asChild
-                isActive={pathname === item.href}
-              >
-                <a href={item.href}>
-                  <item.icon />
-                  <span>{item.label}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
+        {user && (
+          <SidebarMenu>
+            {menuItems.map((item) => (
+              <SidebarMenuItem key={item.href}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === item.href}
+                >
+                  <a href={item.href}>
+                    <item.icon />
+                    <span>{item.label}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        )}
       </SidebarContent>
       <Separator />
       <SidebarFooter>
-        <UserNav />
+        {user ? (
+          <UserNav />
+        ) : (
+          <div className="flex flex-col gap-2">
+             <Button asChild variant="outline"><a href="/login">Login</a></Button>
+             <Button asChild><a href="/signup">Sign Up</a></Button>
+          </div>
+        )}
       </SidebarFooter>
     </Sidebar>
   );

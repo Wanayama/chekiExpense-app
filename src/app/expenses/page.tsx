@@ -1,34 +1,91 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Expense } from '@/lib/types';
-import { mockExpenses, mockCategories } from '@/lib/data';
+import { mockCategories } from '@/lib/data';
 import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Loader2 } from 'lucide-react';
 import { columns } from '@/components/expenses/columns';
 import { DataTable } from '@/components/expenses/data-table';
 import { ExpenseForm } from '@/components/expenses/expense-form';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { useAuth } from '@/context/auth-context';
+import { addExpense as addExpenseToDB, getExpenses, deleteExpense as deleteExpenseFromDB, updateExpense as updateExpenseInDB } from '@/services/expenses';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 export default function ExpensesPage() {
-  const [expenses, setExpenses] = useState<Expense[]>(mockExpenses);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const router = useRouter();
 
-  const addExpense = (newExpenseData: Omit<Expense, 'id'>) => {
-    const newExpense: Expense = {
-      id: (expenses.length + 1).toString(),
-      ...newExpenseData,
-    };
-    setExpenses(prev => [newExpense, ...prev]);
-    setIsFormOpen(false);
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = getExpenses(user.uid, (expenses) => {
+        setExpenses(expenses);
+        setIsLoading(false);
+      });
+      return () => unsubscribe();
+    } else if (user === null) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  const addExpense = async (newExpenseData: Omit<Expense, 'id' | 'userId'>) => {
+    if (!user) return;
+    try {
+      await addExpenseToDB(user.uid, newExpenseData);
+      setIsFormOpen(false);
+       toast({
+        title: "Expense added",
+        description: "Your expense has been successfully added.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to add expense.",
+      });
+    }
   };
   
-  const deleteExpense = (id: string) => {
-    setExpenses(prev => prev.filter(expense => expense.id !== id));
+  const deleteExpense = async (id: string) => {
+    try {
+      await deleteExpenseFromDB(user!.uid, id);
+      toast({
+        title: "Expense deleted",
+        description: "Your expense has been successfully deleted.",
+      });
+    } catch(error) {
+       toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete expense.",
+      });
+    }
   }
   
-  const editExpense = (updatedExpense: Expense) => {
-    setExpenses(prev => prev.map(expense => expense.id === updatedExpense.id ? updatedExpense : expense));
+  const editExpense = async (updatedExpense: Omit<Expense, 'userId'>) => {
+    try {
+        await updateExpenseInDB(user!.uid, updatedExpense);
+        toast({
+            title: "Expense updated",
+            description: "Your expense has been successfully updated.",
+        });
+    } catch (error) {
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Failed to update expense.",
+        });
+    }
+  }
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-full"><Loader2 className="h-8 w-8 animate-spin" /></div>;
   }
 
   return (

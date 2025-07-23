@@ -40,7 +40,7 @@ import { useState } from "react"
 
 interface ColumnsProps {
     deleteExpense: (id: string) => void;
-    editExpense: (expense: Expense) => void;
+    editExpense: (expense: Omit<Expense, 'userId'>) => void;
 }
 
 export const columns = ({ deleteExpense, editExpense }: ColumnsProps): ColumnDef<Expense>[] => [
@@ -128,7 +128,7 @@ export const columns = ({ deleteExpense, editExpense }: ColumnsProps): ColumnDef
         const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
         const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-        const handleEditSubmit = (updatedExpenseData: Omit<Expense, 'id'>) => {
+        const handleEditSubmit = (updatedExpenseData: Omit<Expense, 'id' | 'userId'>) => {
             editExpense({ ...updatedExpenseData, id: expense.id });
             setIsEditDialogOpen(false);
         };

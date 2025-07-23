@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import type { Expense, Category, SuggestedAllocation } from '@/lib/types';
-import { mockExpenses, mockCategories, mockIncome } from '@/lib/data';
+import { mockIncome } from '@/lib/data';
+import { useAuth } from '@/context/auth-context';
+import { getExpenses } from '@/services/expenses';
 
-import { DollarSign, CreditCard, Banknote, Landmark } from 'lucide-react';
+import { DollarSign, CreditCard, Banknote, Landmark, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { OverviewCards } from '@/components/dashboard/overview-cards';
 import { ExpenseChart } from '@/components/dashboard/expense-chart';
@@ -12,11 +15,30 @@ import { RecentExpenses } from '@/components/dashboard/recent-expenses';
 import { AiBudgetSuggester } from '@/components/dashboard/ai-budget-suggester';
 
 export default function DashboardPage() {
-  const [expenses, setExpenses] = useState<Expense[]>(mockExpenses);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [income] = useState<number>(mockIncome);
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = getExpenses(user.uid, (expenses) => {
+        setExpenses(expenses);
+        setIsLoading(false);
+      });
+      return () => unsubscribe();
+    } else if (user === null) {
+      router.push('/login');
+    }
+  }, [user, router]);
 
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   const balance = income - totalExpenses;
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center h-full"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+  }
 
   return (
     <div className="flex-1 space-y-4">
@@ -39,7 +61,7 @@ export default function DashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold">${totalExpenses.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
-              {((totalExpenses / income) * 100).toFixed(2)}% of income
+              {income > 0 ? ((totalExpenses / income) * 100).toFixed(2) : 0}% of income
             </p>
           </CardContent>
         </Card>

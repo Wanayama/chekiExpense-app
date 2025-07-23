@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { MainSidebar } from '@/components/layout/main-sidebar';
+import { AuthProvider } from '@/context/auth-context';
 
 export const metadata: Metadata = {
   title: 'VizExpense',
@@ -24,6 +25,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AuthProvider>
             <SidebarProvider>
               <MainSidebar />
               <SidebarInset>
@@ -33,6 +35,7 @@ export default function RootLayout({
               </SidebarInset>
               <Toaster />
             </SidebarProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -37,11 +37,13 @@ const formSchema = z.object({
   }),
 })
 
+type FormSubmitData = Omit<Expense, 'id' | 'userId'>
+
 interface ExpenseFormProps {
   categories: Category[];
-  onSubmit: (data: Omit<Expense, 'id'>) => void;
+  onSubmit: (data: FormSubmitData) => void;
   onCancel: () => void;
-  initialData?: Expense;
+  initialData?: Omit<Expense, 'userId'>;
 }
 
 export function ExpenseForm({ categories, onSubmit, onCancel, initialData }: ExpenseFormProps) {

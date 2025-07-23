@@ -4,10 +4,11 @@ export type Expense = {
   amount: number;
   date: Date;
   category: string;
+  userId: string;
 };
 
 export type Category = {
-  id: string;
+  id:string;
   name: string;
   icon?: React.ElementType;
 };
