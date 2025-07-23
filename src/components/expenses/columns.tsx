@@ -1,6 +1,6 @@
 "use client"
 
-import type { ColumnDef } from "@tanstack/react-table"
+import type { ColumnDef, Table } from "@tanstack/react-table"
 import type { Expense } from "@/lib/types"
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -41,9 +41,10 @@ import { useState } from "react"
 interface ColumnsProps {
     deleteExpense: (id: string) => void;
     editExpense: (expense: Expense) => void;
+    table: Table<Expense>;
 }
 
-export const columns = ({ deleteExpense, editExpense }: ColumnsProps): ColumnDef<Expense>[] => [
+export const columns = ({ deleteExpense, editExpense, table }: ColumnsProps): ColumnDef<Expense>[] => [
   {
     id: "select",
     header: ({ table }) => (

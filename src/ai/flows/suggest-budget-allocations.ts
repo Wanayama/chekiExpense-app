@@ -55,10 +55,7 @@ Analyze these past expenses:
 
 Total Income: {{income}}
 
-Based on this spending data and income, suggest budget allocations for each category as a percentage of income, the equivalent amount, and provide a brief justification for each suggestion. Be mindful of the total income so that the total suggested allocation isn't larger than the income. The amount field should be rounded to the nearest dollar.
-
-Format your response as a JSON object:
-{{outputFormat schema=SuggestBudgetAllocationsOutputSchema}}`,
+Based on this spending data and income, suggest budget allocations for each category as a percentage of income, the equivalent amount, and provide a brief justification for each suggestion. Be mindful of the total income so that the total suggested allocation isn't larger than the income. The amount field should be rounded to the nearest dollar.`,
 });
 
 const suggestBudgetAllocationsFlow = ai.defineFlow(

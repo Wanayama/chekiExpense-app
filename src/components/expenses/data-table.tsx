@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import type { ColumnDef, SortingState, ColumnFiltersState, VisibilityState, RowSelectionState } from "@tanstack/react-table"
+import type { ColumnDef, SortingState, ColumnFiltersState, VisibilityState, RowSelectionState, Table as TableType } from "@tanstack/react-table"
 import { 
     useReactTable, 
     getCoreRowModel, 
@@ -30,7 +30,7 @@ import {
 import type { Expense, Category } from "@/lib/types"
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+  columns: (table: TableType<TData>) => ColumnDef<TData, TValue>[]
   data: TData[]
   categories: Category[]
 }
@@ -46,7 +46,7 @@ export function DataTable<TData extends Expense, TValue>({
 
     const table = useReactTable({
         data,
-        columns,
+        columns: columns(table),
         getCoreRowModel: getCoreRowModel(),
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
