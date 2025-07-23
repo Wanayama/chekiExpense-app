@@ -9,7 +9,6 @@ import { columns } from '@/components/expenses/columns';
 import { DataTable } from '@/components/expenses/data-table';
 import { ExpenseForm } from '@/components/expenses/expense-form';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
-import type { Table } from '@tanstack/react-table';
 
 export default function ExpensesPage() {
   const [expenses, setExpenses] = useState<Expense[]>(mockExpenses);
@@ -31,8 +30,6 @@ export default function ExpensesPage() {
   const editExpense = (updatedExpense: Expense) => {
     setExpenses(prev => prev.map(expense => expense.id === updatedExpense.id ? updatedExpense : expense));
   }
-  
-  const tableColumns = (table: Table<Expense>) => columns({ deleteExpense, editExpense, table });
 
   return (
     <div className="container mx-auto py-10">
@@ -63,7 +60,7 @@ export default function ExpensesPage() {
         </Dialog>
       </div>
       <DataTable 
-        columns={tableColumns} 
+        columns={columns({ deleteExpense, editExpense })} 
         data={expenses} 
         categories={mockCategories}
       />

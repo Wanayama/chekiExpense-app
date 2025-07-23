@@ -30,7 +30,7 @@ import {
 import type { Expense, Category } from "@/lib/types"
 
 interface DataTableProps<TData, TValue> {
-  columns: (table: TableType<TData>) => ColumnDef<TData, TValue>[]
+  columns: ColumnDef<TData, TValue>[]
   data: TData[]
   categories: Category[]
 }
@@ -46,7 +46,7 @@ export function DataTable<TData extends Expense, TValue>({
 
     const table = useReactTable({
         data,
-        columns: columns(table),
+        columns,
         getCoreRowModel: getCoreRowModel(),
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
@@ -141,6 +141,28 @@ export function DataTable<TData extends Expense, TValue>({
           </TableBody>
         </Table>
       </div>
+       <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex-1 text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+        <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+        >
+            Previous
+        </Button>
+        <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+        >
+            Next
+        </Button>
+     </div>
     </div>
   )
 }
