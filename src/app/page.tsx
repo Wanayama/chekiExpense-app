@@ -17,8 +17,14 @@ export default function DashboardPage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [income] = useState<number>(mockIncome);
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
 
   useEffect(() => {
     if (user) {
@@ -27,16 +33,18 @@ export default function DashboardPage() {
         setIsLoading(false);
       });
       return () => unsubscribe();
-    } else if (user === null) {
-      router.push('/login');
     }
-  }, [user, router]);
+  }, [user]);
 
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   const balance = income - totalExpenses;
 
-  if (isLoading) {
+  if (loading || isLoading) {
     return <div className="flex items-center justify-center h-full"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+  }
+  
+  if (!user) {
+    return null;
   }
 
   return (

@@ -18,9 +18,15 @@ export default function ExpensesPage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
 
   useEffect(() => {
     if (user) {
@@ -29,10 +35,8 @@ export default function ExpensesPage() {
         setIsLoading(false);
       });
       return () => unsubscribe();
-    } else if (user === null) {
-      router.push('/login');
     }
-  }, [user, router]);
+  }, [user]);
 
   const addExpense = async (newExpenseData: Omit<Expense, 'id' | 'userId'>) => {
     if (!user) return;
@@ -84,8 +88,12 @@ export default function ExpensesPage() {
     }
   }
 
-  if (isLoading) {
+  if (loading || isLoading) {
     return <div className="flex items-center justify-center h-full"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+  }
+  
+  if (!user) {
+      return null;
   }
 
   return (
