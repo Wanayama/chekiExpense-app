@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { suggestBudgetAllocations, SuggestBudgetAllocationsOutput } from '@/ai/flows/suggest-budget-allocations';
 import type { Expense } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 interface AiBudgetSuggesterProps {
   expenses: Expense[];
@@ -20,6 +21,7 @@ export function AiBudgetSuggester({ expenses, income }: AiBudgetSuggesterProps) 
   const [suggestions, setSuggestions] = useState<SuggestBudgetAllocationsOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { theme } = useTheme();
 
   const handleGenerateSuggestions = async () => {
     setIsLoading(true);
@@ -68,7 +70,7 @@ export function AiBudgetSuggester({ expenses, income }: AiBudgetSuggesterProps) 
             </Pie>
             <Tooltip
                 contentStyle={{
-                    backgroundColor: 'hsl(var(--background))',
+                    backgroundColor: theme === 'dark' ? 'hsl(var(--background))' : '#fff',
                     borderColor: 'hsl(var(--border))',
                     color: 'hsl(var(--foreground))'
                 }}

@@ -18,7 +18,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import type { ColumnDef } from "@tanstack/react-table"
+import type { ColumnDef, SortingState, ColumnFiltersState, VisibilityState, RowSelectionState } from "@tanstack/react-table"
+import { 
+    useReactTable, 
+    getCoreRowModel, 
+    flexRender, 
+    getSortedRowModel, 
+    getFilteredRowModel,
+    getPaginationRowModel
+} from "@tanstack/react-table"
 import type { Expense, Category } from "@/lib/types"
 
 interface DataTableProps<TData, TValue> {
@@ -32,54 +40,49 @@ export function DataTable<TData extends Expense, TValue>({
   data,
   categories
 }: DataTableProps<TData, TValue>) {
-    const [descriptionFilter, setDescriptionFilter] = React.useState("")
-    const [categoryFilter, setCategoryFilter] = React.useState("all")
-    const [sorting, setSorting] = React.useState<{id: string, desc: boolean} | null>(null);
+    const [sorting, setSorting] = React.useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({})
 
-    const filteredData = React.useMemo(() => {
-        let filtered = data.filter(item =>
-            item.description.toLowerCase().includes(descriptionFilter.toLowerCase())
-        );
-
-        if (categoryFilter !== "all") {
-            filtered = filtered.filter(item => item.category === categoryFilter);
+    const table = useReactTable({
+        data,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        onColumnFiltersChange: setColumnFilters,
+        getFilteredRowModel: getFilteredRowModel(),
+        onRowSelectionChange: setRowSelection,
+        getPaginationRowModel: getPaginationRowModel(),
+        state: {
+            sorting,
+            columnFilters,
+            rowSelection,
+        },
+    })
+    
+    const categoryFilter = table.getColumn("category")?.getFilterValue() as string || "all";
+    const handleCategoryFilterChange = (value: string) => {
+        if (value === "all") {
+            table.getColumn("category")?.setFilterValue(undefined)
+        } else {
+            table.getColumn("category")?.setFilterValue(value)
         }
-
-        if (sorting) {
-            filtered.sort((a, b) => {
-                const valA = a[sorting.id as keyof TData];
-                const valB = b[sorting.id as keyof TData];
-
-                if (valA < valB) return sorting.desc ? 1 : -1;
-                if (valA > valB) return sorting.desc ? -1 : 1;
-                return 0;
-            });
-        }
-
-        return filtered
-    }, [data, descriptionFilter, categoryFilter, sorting]);
-
-    const handleSort = (id: string) => {
-        setSorting(prev => {
-            if (prev?.id === id) {
-                return { id, desc: !prev.desc };
-            }
-            return { id, desc: false };
-        });
     }
+
 
   return (
     <div>
       <div className="flex items-center py-4 gap-4">
         <Input
           placeholder="Filter by description..."
-          value={descriptionFilter}
+          value={(table.getColumn("description")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            setDescriptionFilter(event.target.value)
+            table.getColumn("description")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
-        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+        <Select value={categoryFilter} onValueChange={handleCategoryFilterChange}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Filter by category" />
             </SelectTrigger>
@@ -94,28 +97,33 @@ export function DataTable<TData extends Expense, TValue>({
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            <TableRow>
-              {columns.map((column, index) => (
-                <TableHead key={index}>
-                  {column.header && typeof column.header === 'function' ? column.header({
-                    column: {
-                        toggleSorting: () => handleSort(column.id || (column.accessorKey as string)),
-                        getIsSorted: () => sorting?.id === (column.id || (column.accessorKey as string)) ? (sorting.desc ? 'desc' : 'asc') : false
-                    }
-                  }) : column.header as React.ReactNode}
-                </TableHead>
-              ))}
-            </TableRow>
+            {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                    return (
+                    <TableHead key={header.id}>
+                        {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                            )}
+                    </TableHead>
+                    )
+                })}
+                </TableRow>
+            ))}
           </TableHeader>
           <TableBody>
-            {filteredData.length ? (
-              filteredData.map((row, rowIndex) => (
-                <TableRow key={rowIndex}>
-                  {columns.map((column, colIndex) => (
-                    <TableCell key={colIndex}>
-                      {column.cell && typeof column.cell === 'function'
-                        ? column.cell({ row: { original: row } } as any)
-                        : (row as any)[column.accessorKey as string]}
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>

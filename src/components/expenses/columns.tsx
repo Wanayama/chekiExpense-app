@@ -73,6 +73,9 @@ export const columns = ({ deleteExpense, editExpense }: ColumnsProps): ColumnDef
   {
     accessorKey: "category",
     header: "Category",
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    }
   },
   {
     accessorKey: "date",
