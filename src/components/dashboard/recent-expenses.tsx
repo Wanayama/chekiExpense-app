@@ -24,7 +24,7 @@ export function RecentExpenses({ expenses }: RecentExpensesProps) {
             <p className="text-sm font-medium leading-none">{expense.description}</p>
             <p className="text-sm text-muted-foreground">{expense.category}</p>
           </div>
-          <div className="ml-auto font-medium">+${expense.amount.toFixed(2)}</div>
+          <div className="ml-auto font-medium">-${expense.amount.toFixed(2)}</div>
         </div>
       ))}
     </div>
