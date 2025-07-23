@@ -113,9 +113,9 @@ export const columns = ({ deleteExpense, editExpense }: ColumnsProps): ColumnDef
     },
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"))
-      const formatted = new Intl.NumberFormat("en-US", {
+      const formatted = new Intl.NumberFormat("en-KE", {
         style: "currency",
-        currency: "USD",
+        currency: "KES",
       }).format(amount)
  
       return <div className="text-right font-medium">{formatted}</div>

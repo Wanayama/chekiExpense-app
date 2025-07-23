@@ -18,7 +18,7 @@ export function OverviewCards({ income, expenses, balance }: OverviewCardsProps)
                     <DollarSign className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">${income.toLocaleString()}</div>
+                    <div className="text-2xl font-bold">KES{income.toLocaleString()}</div>
                     <p className="text-xs text-muted-foreground">Your total income for this period.</p>
                 </CardContent>
             </Card>
@@ -30,7 +30,7 @@ export function OverviewCards({ income, expenses, balance }: OverviewCardsProps)
                 <CardContent>
                     <div className="text-2xl font-bold">${expenses.toLocaleString()}</div>
                      <p className="text-xs text-muted-foreground">
-                        {((expenses / income) * 100).toFixed(2)}% of income
+                        {((expenses / income) * 100).toFixed(2)}KES of income
                     </p>
                 </CardContent>
             </Card>
@@ -40,7 +40,7 @@ export function OverviewCards({ income, expenses, balance }: OverviewCardsProps)
                     <Landmark className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">${balance.toLocaleString()}</div>
+                    <div className="text-2xl font-bold">KES{balance.toLocaleString()}</div>
                     <p className="text-xs text-muted-foreground">Your remaining balance.</p>
                 </CardContent>
             </Card>
