@@ -8,7 +8,7 @@ import { PlusCircle, Loader2 } from 'lucide-react';
 import { columns } from '@/components/expenses/columns';
 import { DataTable } from '@/components/expenses/data-table';
 import { ExpenseForm } from '@/components/expenses/expense-form';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { useAuth } from '@/context/auth-context';
 import { addExpense as addExpenseToDB, getExpenses, deleteExpense as deleteExpenseFromDB, updateExpense as updateExpenseInDB } from '@/services/expenses';
 import { useToast } from '@/hooks/use-toast';
