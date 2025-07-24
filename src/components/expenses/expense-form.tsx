@@ -82,6 +82,7 @@ export function ExpenseForm({ categories, onSubmit, onCancel, initialData }: Exp
     }
   };
 
+  
   function handleSubmit(values: z.infer<typeof formSchema>) {
     onSubmit(values)
     form.reset()
