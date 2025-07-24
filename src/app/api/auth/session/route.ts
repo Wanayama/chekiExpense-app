@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
     try {
       const sessionCookie = await auth().createSessionCookie(idToken, { expiresIn });
-      cookies().set('session', sessionCookie, {
+      (await cookies()).set('session', sessionCookie, {
         maxAge: expiresIn,
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -30,6 +30,6 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE() {
-  cookies().delete('session');
+  (await cookies()).delete('session');
   return NextResponse.json({ status: 'success' });
 }

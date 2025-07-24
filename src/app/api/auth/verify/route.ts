@@ -7,7 +7,7 @@ initFirebaseAdminApp();
 
 export async function GET(request: NextRequest) {
   const headersList = headers();
-  if (headersList.get('x-internal-request') !== 'true') {
+  if ((await headersList).get('x-internal-request') !== 'true') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
