@@ -17,10 +17,16 @@ import { LayoutDashboard, Wallet, Settings } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { useAuth } from '@/context/auth-context';
 import { Button } from '../ui/button';
+import { useEffect, useState } from 'react';
 
 export function MainSidebar() {
   const pathname = usePathname();
   const { user, loading } = useAuth();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const menuItems = [
     {
@@ -73,7 +79,7 @@ export function MainSidebar() {
       </SidebarContent>
       <Separator />
       <SidebarFooter>
-        {loading ? null : user ? (
+        {!mounted || loading ? null : user ? (
           <UserNav />
         ) : (
           <div className="flex flex-col gap-2">
