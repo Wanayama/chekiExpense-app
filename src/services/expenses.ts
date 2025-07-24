@@ -6,7 +6,7 @@ type RawExpense = Omit<Expense, 'date'> & { date: Timestamp };
 type ExpenseInput = Omit<Expense, 'id' | 'userId' | 'date'> & { date: Date };
 
 
-// Get expenses for a user in real-time
+// Get expenses for a user in real-time.
 export const getExpenses = (userId: string, callback: (expenses: Expense[]) => void) => {
   const expensesCol = collection(db, 'users', userId, 'expenses');
   const q = query(expensesCol, orderBy('date', 'desc'));
