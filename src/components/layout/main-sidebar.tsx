@@ -20,7 +20,7 @@ import { Button } from '../ui/button';
 
 export function MainSidebar() {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   const menuItems = [
     {
@@ -73,7 +73,7 @@ export function MainSidebar() {
       </SidebarContent>
       <Separator />
       <SidebarFooter>
-        {user ? (
+        {loading ? null : user ? (
           <UserNav />
         ) : (
           <div className="flex flex-col gap-2">
