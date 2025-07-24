@@ -60,7 +60,8 @@ export function DataTable<TData extends Expense, TValue>({
             rowSelection,
         },
     })
-    
+
+  
     const categoryFilter = table.getColumn("category")?.getFilterValue() as string || "all";
     const handleCategoryFilterChange = (value: string) => {
         if (value === "all") {
