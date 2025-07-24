@@ -15,7 +15,7 @@ export const getIncome = (userId: string, callback: (income: number) => void) =>
         if (doc.exists()) {
             callback(doc.data().amount);
         } else {
-            callback(0); // Default to 0 if no income is set
+            callback(0); // Default to 0 if no income is set.
         }
     });
 };
