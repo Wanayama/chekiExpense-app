@@ -53,13 +53,13 @@ export function MainSidebar() {
             <div className="p-2 flex items-center gap-2">
                 <h1 className="text-xl font-semibold">VizExpense</h1>
             </div>
-            <div className="flex items-center gap-2">
-                <SidebarTrigger className="sm:hidden" />
+            <div className="sm:hidden flex items-center gap-2">
+                <SidebarTrigger />
             </div>
         </div>
       </SidebarHeader>
       <SidebarContent>
-        {user && (
+        {mounted && user && (
           <SidebarMenu>
             {menuItems.map((item) => (
               <SidebarMenuItem key={item.href}>
