@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const emailSchema = z.object({
   newEmail: z.string().email({ message: "Please enter a valid email." }),
@@ -30,10 +31,11 @@ const phoneSchema = z.object({
 export default function SettingsPage() {
   const [mounted, setMounted] = useState(false)
   const { setTheme, theme } = useTheme()
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
   const { toast } = useToast()
   const [isEmailLoading, setIsEmailLoading] = useState(false)
   const [isPhoneLoading, setIsPhoneLoading] = useState(false)
+  const router = useRouter()
 
   const emailForm = useForm<z.infer<typeof emailSchema>>({
     resolver: zodResolver(emailSchema),
@@ -44,21 +46,25 @@ export default function SettingsPage() {
     resolver: zodResolver(phoneSchema),
     defaultValues: { phoneNumber: user?.phoneNumber || "" },
   })
-
+  
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    if (!loading && !user) {
+      router.push('/login');
+    } else {
+        setMounted(true)
+    }
+  }, [user, loading, router])
 
   const handleEmailChange = async (data: z.infer<typeof emailSchema>) => {
     setIsEmailLoading(true)
-    if (!user) {
+    if (!user || !user.email) {
       toast({ variant: "destructive", title: "Not authenticated" })
       setIsEmailLoading(false)
       return
     }
 
     try {
-      const credential = EmailAuthProvider.credential(user.email!, data.password)
+      const credential = EmailAuthProvider.credential(user.email, data.password)
       await reauthenticateWithCredential(user, credential)
       await verifyBeforeUpdateEmail(user, data.newEmail)
       toast({ title: "Verification email sent", description: "Please check your new email address to verify the change." })
@@ -92,6 +98,10 @@ export default function SettingsPage() {
         setIsPhoneLoading(false);
     }
   }
+  
+  if (!mounted || loading || !user) {
+    return <div className="flex items-center justify-center h-screen"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -105,25 +115,23 @@ export default function SettingsPage() {
           <CardDescription>Customize the look and feel of the app.</CardDescription>
         </CardHeader>
         <CardContent>
-          {mounted && (
-            <div className="space-y-2">
-                <Label>Theme</Label>
-                <RadioGroup onValueChange={setTheme} defaultValue={theme} className="flex space-x-4">
-                <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="light" id="light" />
-                    <Label htmlFor="light">Light</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="dark" id="dark" />
-                    <Label htmlFor="dark">Dark</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="system" id="system" />
-                    <Label htmlFor="system">System</Label>
-                </div>
-                </RadioGroup>
-            </div>
-          )}
+          <div className="space-y-2">
+              <Label>Theme</Label>
+              <RadioGroup onValueChange={setTheme} defaultValue={theme} className="flex space-x-4">
+              <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="light" id="light" />
+                  <Label htmlFor="light">Light</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="dark" id="dark" />
+                  <Label htmlFor="dark">Dark</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="system" id="system" />
+                  <Label htmlFor="system">System</Label>
+              </div>
+              </RadioGroup>
+          </div>
         </CardContent>
       </Card>
       
