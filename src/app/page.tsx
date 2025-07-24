@@ -84,6 +84,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex-1 space-y-4">
+      <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Dashboard</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

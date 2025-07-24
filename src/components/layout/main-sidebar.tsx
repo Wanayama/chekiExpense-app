@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { UserNav } from './user-nav';
 import { ThemeToggle } from '../theme-toggle';
@@ -38,10 +39,13 @@ export function MainSidebar() {
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center justify-between">
-            <div className="p-2">
+            <div className="p-2 flex items-center gap-2">
                 <h1 className="text-xl font-semibold">VizExpense</h1>
             </div>
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <SidebarTrigger className="hidden sm:flex" />
+            </div>
         </div>
       </SidebarHeader>
       <SidebarContent>

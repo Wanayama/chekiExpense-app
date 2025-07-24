@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { MainSidebar } from '@/components/layout/main-sidebar';
 import { AuthProvider } from '@/context/auth-context';
+import { AppHeader } from '@/components/layout/app-header';
 
 export const metadata: Metadata = {
   title: 'VizExpense',
@@ -29,6 +30,7 @@ export default function RootLayout({
             <SidebarProvider>
               <MainSidebar />
               <SidebarInset>
+                <AppHeader />
                 <div className="p-4 sm:p-6 lg:p-8 h-full overflow-y-auto">
                   {children}
                 </div>
