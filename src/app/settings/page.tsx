@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useTheme } from "next-themes"
 import { useAuth } from "@/context/auth-context"
-import { updateEmail, updatePhoneNumber, PhoneAuthProvider, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth"
+import { verifyBeforeUpdateEmail, PhoneAuthProvider, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth"
 import { auth } from "@/lib/firebase"
 
 import { Button } from "@/components/ui/button"
@@ -60,8 +60,8 @@ export default function SettingsPage() {
     try {
       const credential = EmailAuthProvider.credential(user.email!, data.password)
       await reauthenticateWithCredential(user, credential)
-      await updateEmail(user, data.newEmail)
-      toast({ title: "Email updated successfully" })
+      await verifyBeforeUpdateEmail(user, data.newEmail)
+      toast({ title: "Verification email sent", description: "Please check your new email address to verify the change." })
       emailForm.reset()
     } catch (error: any) {
       toast({ variant: "destructive", title: "Error updating email", description: error.message })
