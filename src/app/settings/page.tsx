@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -28,6 +28,7 @@ const phoneSchema = z.object({
 })
 
 export default function SettingsPage() {
+  const [mounted, setMounted] = useState(false)
   const { setTheme, theme } = useTheme()
   const { user } = useAuth()
   const { toast } = useToast()
@@ -43,6 +44,10 @@ export default function SettingsPage() {
     resolver: zodResolver(phoneSchema),
     defaultValues: { phoneNumber: user?.phoneNumber || "" },
   })
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleEmailChange = async (data: z.infer<typeof emailSchema>) => {
     setIsEmailLoading(true)
@@ -88,7 +93,6 @@ export default function SettingsPage() {
     }
   }
 
-
   return (
     <div className="space-y-6">
       <div>
@@ -101,23 +105,25 @@ export default function SettingsPage() {
           <CardDescription>Customize the look and feel of the app.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-2">
-            <Label>Theme</Label>
-            <RadioGroup onValueChange={setTheme} defaultValue={theme} className="flex space-x-4">
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="light" id="light" />
-                <Label htmlFor="light">Light</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="dark" id="dark" />
-                <Label htmlFor="dark">Dark</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="system" id="system" />
-                <Label htmlFor="system">System</Label>
-              </div>
-            </RadioGroup>
-          </div>
+          {mounted && (
+            <div className="space-y-2">
+                <Label>Theme</Label>
+                <RadioGroup onValueChange={setTheme} defaultValue={theme} className="flex space-x-4">
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="light" id="light" />
+                    <Label htmlFor="light">Light</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="dark" id="dark" />
+                    <Label htmlFor="dark">Dark</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="system" id="system" />
+                    <Label htmlFor="system">System</Label>
+                </div>
+                </RadioGroup>
+            </div>
+          )}
         </CardContent>
       </Card>
       
