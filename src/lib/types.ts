@@ -7,6 +7,7 @@ export type Expense = {
   userId: string;
 };
 
+
 export type Category = {
   id:string;
   name: string;
