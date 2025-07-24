@@ -48,7 +48,7 @@ export default function LoginPage() {
     <Card>
         <CardHeader className="text-center">
             <CardTitle className="text-2xl">Welcome Back!</CardTitle>
-            <CardDescription>Sign in to continue to VizExpense</CardDescription>
+            <CardDescription>Sign in to continue to ChekiExpense</CardDescription>
         </CardHeader>
         <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

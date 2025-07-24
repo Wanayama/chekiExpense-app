@@ -8,7 +8,7 @@ import { AuthProvider } from '@/context/auth-context';
 import { AppHeader } from '@/components/layout/app-header';
 
 export const metadata: Metadata = {
-  title: 'VizExpense',
+  title: 'ChekiExpense',
   description: 'Smart Expense Tracker with Data Visualization',
 };
 

@@ -52,7 +52,7 @@ export default function SignupPage() {
     <Card>
         <CardHeader className="text-center">
             <CardTitle className="text-2xl">Create an Account</CardTitle>
-            <CardDescription>Start tracking your expenses with VizExpense</CardDescription>
+            <CardDescription>Start tracking your expenses with ChekiExpense</CardDescription>
         </CardHeader>
         <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

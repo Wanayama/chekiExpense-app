@@ -51,7 +51,7 @@ export function MainSidebar() {
       <SidebarHeader>
         <div className="flex items-center justify-between">
             <div className="p-2 flex items-center gap-2">
-                <h1 className="text-xl font-semibold">VizExpense</h1>
+                <h1 className="text-xl font-semibold">ChekiExpense</h1>
             </div>
             <div className="sm:hidden flex items-center gap-2">
                 <SidebarTrigger />
