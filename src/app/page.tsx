@@ -142,8 +142,8 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
+      <div className="grid gap-4 lg:grid-cols-7">
+        <Card className="lg:col-span-4">
           <CardHeader>
             <CardTitle>Spending Overview</CardTitle>
             <CardDescription>A look at your spending trends over the last few months.</CardDescription>
@@ -152,7 +152,7 @@ export default function DashboardPage() {
             <ExpenseChart expenses={expenses} />
           </CardContent>
         </Card>
-        <Card className="lg:col-span-3 col-span-4">
+        <Card className="lg:col-span-3">
           <CardHeader>
             <CardTitle>AI Budget Helper</CardTitle>
             <CardDescription>AI-powered suggestions to optimize your budget.</CardDescription>

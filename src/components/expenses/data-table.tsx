@@ -73,17 +73,17 @@ export function DataTable<TData extends Expense, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 gap-4">
+      <div className="flex flex-col sm:flex-row items-center py-4 gap-4">
         <Input
           placeholder="Filter by description..."
           value={(table.getColumn("description")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("description")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="w-full sm:max-w-sm"
         />
         <Select value={categoryFilter} onValueChange={handleCategoryFilterChange}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filter by category" />
             </SelectTrigger>
             <SelectContent>
