@@ -133,6 +133,7 @@ export const columns = ({ deleteExpense, editExpense }: ColumnsProps): ColumnDef
             setIsEditDialogOpen(false);
         };
 
+      
         return (
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
             <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
