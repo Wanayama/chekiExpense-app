@@ -1,3 +1,4 @@
+
 "use client"
 
 import {
@@ -18,7 +19,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
 import { useAuth } from "@/context/auth-context"
-import { LogOut } from "lucide-react"
+import { LogOut, Settings } from "lucide-react"
+import Link from "next/link"
 
 export function UserNav() {
   const { user, signOut } = useAuth();
@@ -54,14 +56,11 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
+           <DropdownMenuItem asChild>
+            <Link href="/settings">
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
