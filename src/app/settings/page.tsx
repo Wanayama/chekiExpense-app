@@ -50,7 +50,7 @@ export default function SettingsPage() {
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
-    } else {
+    } else if(user) {
         setMounted(true)
     }
   }, [user, loading, router])
@@ -99,7 +99,7 @@ export default function SettingsPage() {
     }
   }
   
-  if (!mounted || loading || !user) {
+  if (!mounted) {
     return <div className="flex items-center justify-center h-screen"><Loader2 className="h-8 w-8 animate-spin" /></div>;
   }
 

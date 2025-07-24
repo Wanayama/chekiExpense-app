@@ -21,10 +21,13 @@ export default function ExpensesPage() {
   const { user, loading } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
+    } else if (user) {
+      setMounted(true);
     }
   }, [user, loading, router]);
 
@@ -88,12 +91,8 @@ export default function ExpensesPage() {
     }
   }
 
-  if (loading || isLoading) {
+  if (!mounted || isLoading) {
     return <div className="flex items-center justify-center h-screen"><Loader2 className="h-8 w-8 animate-spin" /></div>;
-  }
-  
-  if (!user) {
-      return null;
   }
 
   return (

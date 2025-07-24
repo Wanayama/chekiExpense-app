@@ -79,13 +79,17 @@ export function MainSidebar() {
       </SidebarContent>
       <Separator />
       <SidebarFooter>
-        {(!mounted || loading) ? null : user ? (
-          <UserNav />
-        ) : (
-          <div className="flex flex-col gap-2">
-             <Button asChild variant="outline"><a href="/login">Login</a></Button>
-             <Button asChild><a href="/signup">Sign Up</a></Button>
-          </div>
+        {mounted && (
+          <>
+            {user ? (
+              <UserNav />
+            ) : (
+              <div className="flex flex-col gap-2">
+                 <Button asChild variant="outline"><a href="/login">Login</a></Button>
+                 <Button asChild><a href="/signup">Sign Up</a></Button>
+              </div>
+            )}
+          </>
         )}
       </SidebarFooter>
     </Sidebar>
