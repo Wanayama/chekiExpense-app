@@ -79,7 +79,7 @@ export function MainSidebar() {
       </SidebarContent>
       <Separator />
       <SidebarFooter>
-        {!mounted || loading ? null : user ? (
+        {(!mounted || loading) ? null : user ? (
           <UserNav />
         ) : (
           <div className="flex flex-col gap-2">
