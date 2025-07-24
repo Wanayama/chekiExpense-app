@@ -44,7 +44,7 @@ export function MainSidebar() {
             </div>
             <div className="flex items-center gap-2">
                 <ThemeToggle />
-                <SidebarTrigger className="hidden sm:flex" />
+                <SidebarTrigger className="hidden sm:flex lg:hidden" />
             </div>
         </div>
       </SidebarHeader>
