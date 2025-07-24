@@ -13,15 +13,14 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { UserNav } from './user-nav';
-import { ThemeToggle } from '../theme-toggle';
-import { LayoutDashboard, Wallet, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Wallet, Settings } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { useAuth } from '@/context/auth-context';
 import { Button } from '../ui/button';
 
 export function MainSidebar() {
   const pathname = usePathname();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
 
   const menuItems = [
     {
@@ -49,7 +48,7 @@ export function MainSidebar() {
                 <h1 className="text-xl font-semibold">VizExpense</h1>
             </div>
             <div className="flex items-center gap-2">
-                <SidebarTrigger className="hidden sm:flex lg:hidden" />
+                <SidebarTrigger className="sm:hidden" />
             </div>
         </div>
       </SidebarHeader>
