@@ -21,19 +21,21 @@ export const downloadAsCSV = (expenses: Expense[]) => {
   const csvString = csvRows.join('\n');
   const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
+  if (link.href) {
+    URL.revokeObjectURL(link.href);
+  }
   const url = URL.createObjectURL(blob);
   link.href = url;
   link.setAttribute('download', 'expenses.csv');
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  URL.revokeObjectURL(url);
 };
 
 export const downloadAsPDF = (expenses: Expense[]) => {
   if (!expenses.length) return;
   const doc = new jsPDF();
-
+  
   doc.text('Expenses Report', 14, 16);
   
   const tableColumn = ["Date", "Description", "Category", "Amount (KES)"];
@@ -62,7 +64,7 @@ export const downloadAsPDF = (expenses: Expense[]) => {
         cellPadding: 2,
     },
     headStyles: {
-        fillColor: [30, 136, 229], // A nice blue color
+        fillColor: [30, 136, 229],
         textColor: 255,
         fontStyle: 'bold',
     },
