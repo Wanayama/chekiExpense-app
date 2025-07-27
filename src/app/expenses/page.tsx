@@ -4,15 +4,22 @@ import { useState, useEffect } from 'react';
 import type { Expense } from '@/lib/types';
 import { mockCategories } from '@/lib/data';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Loader2 } from 'lucide-react';
+import { PlusCircle, Loader2, Download } from 'lucide-react';
 import { columns } from '@/components/expenses/columns';
 import { DataTable } from '@/components/expenses/data-table';
 import { ExpenseForm } from '@/components/expenses/expense-form';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { useAuth } from '@/context/auth-context';
 import { addExpense as addExpenseToDB, getExpenses, deleteExpense as deleteExpenseFromDB, updateExpense as updateExpenseInDB } from '@/services/expenses';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { downloadAsCSV, downloadAsPDF } from '@/lib/download';
 
 export default function ExpensesPage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -102,26 +109,40 @@ export default function ExpensesPage() {
             <h1 className="text-3xl font-bold">Expenses</h1>
             <p className="text-muted-foreground">Manage and track your expenses.</p>
         </div>
-        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-            <DialogTrigger asChild>
-                <Button>
-                    <PlusCircle className="mr-2 h-4 w-4" /> Add New Expense
+        <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                  <Download className="mr-2 h-4 w-4" /> Download
                 </Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Add New Expense</DialogTitle>
-                    <DialogDescription>
-                        Fill in the details of your new expense.
-                    </DialogDescription>
-                </DialogHeader>
-                <ExpenseForm 
-                    categories={mockCategories}
-                    onSubmit={addExpense} 
-                    onCancel={() => setIsFormOpen(false)}
-                />
-            </DialogContent>
-        </Dialog>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => downloadAsCSV(expenses)}>Download as CSV</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => downloadAsPDF(expenses)}>Download as PDF</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+                <DialogTrigger asChild>
+                    <Button>
+                        <PlusCircle className="mr-2 h-4 w-4" /> Add New Expense
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Add New Expense</DialogTitle>
+                        <DialogDescription>
+                            Fill in the details of your new expense.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <ExpenseForm 
+                        categories={mockCategories}
+                        onSubmit={addExpense} 
+                        onCancel={() => setIsFormOpen(false)}
+                    />
+                </DialogContent>
+            </Dialog>
+        </div>
       </div>
       <DataTable 
         columns={columns({ deleteExpense, editExpense })} 
