@@ -4,6 +4,7 @@ import autoTable from 'jspdf-autotable';
 import { format } from 'date-fns';
 
 export const downloadAsCSV = (expenses: Expense[]) => {
+  if (!expenses.length) return;
   const headers = ['Date', 'Description', 'Category', 'Amount'];
   const csvRows = [
     headers.join(','),
@@ -20,23 +21,22 @@ export const downloadAsCSV = (expenses: Expense[]) => {
   const csvString = csvRows.join('\n');
   const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
-  if (link.href) {
-    URL.revokeObjectURL(link.href);
-  }
   const url = URL.createObjectURL(blob);
   link.href = url;
   link.setAttribute('download', 'expenses.csv');
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 };
 
 export const downloadAsPDF = (expenses: Expense[]) => {
+  if (!expenses.length) return;
   const doc = new jsPDF();
 
   doc.text('Expenses Report', 14, 16);
   
-  const tableColumn = ["Date", "Description", "Category", "Amount"];
+  const tableColumn = ["Date", "Description", "Category", "Amount (KES)"];
   const tableRows: (string | number)[][] = [];
 
   expenses.forEach(expense => {
@@ -62,14 +62,15 @@ export const downloadAsPDF = (expenses: Expense[]) => {
         cellPadding: 2,
     },
     headStyles: {
-        fillColor: [22, 160, 133],
+        fillColor: [30, 136, 229], // A nice blue color
         textColor: 255,
         fontStyle: 'bold',
     },
-    didDrawPage: (data) => {
-        // Footer
-        doc.setFontSize(10);
-        doc.text(`Total Expenses: KES ${totalExpenses.toFixed(2)}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
+    foot: [
+        [{ content: `Total Expenses: KES ${totalExpenses.toFixed(2)}`, colSpan: 4, styles: { halign: 'right', fontStyle: 'bold' } }]
+    ],
+    footStyles: {
+        fillColor: [240, 240, 240]
     }
   });
 
