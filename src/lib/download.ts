@@ -1,12 +1,7 @@
 import type { Expense } from './types';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { format } from 'date-fns';
-
-// Extend jsPDF with autoTable
-interface jsPDFWithAutoTable extends jsPDF {
-  autoTable: (options: any) => jsPDF;
-}
 
 export const downloadAsCSV = (expenses: Expense[]) => {
   const headers = ['Date', 'Description', 'Category', 'Amount'];
@@ -37,7 +32,7 @@ export const downloadAsCSV = (expenses: Expense[]) => {
 };
 
 export const downloadAsPDF = (expenses: Expense[]) => {
-  const doc = new jsPDF() as jsPDFWithAutoTable;
+  const doc = new jsPDF();
 
   doc.text('Expenses Report', 14, 16);
   
@@ -55,11 +50,8 @@ export const downloadAsPDF = (expenses: Expense[]) => {
   });
   
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
-  const totalRow = ["", "", "Total", totalExpenses.toFixed(2)];
-  tableRows.push(totalRow);
-
-
-  doc.autoTable({
+  
+  autoTable(doc, {
     head: [tableColumn],
     body: tableRows,
     startY: 20,
@@ -74,13 +66,10 @@ export const downloadAsPDF = (expenses: Expense[]) => {
         textColor: 255,
         fontStyle: 'bold',
     },
-    foot: [
-      [{ content: 'Total', colSpan: 3, styles: { halign: 'right', fontStyle: 'bold' } }, { content: totalExpenses.toFixed(2), styles: { fontStyle: 'bold' } }]
-    ],
-    footStyles: {
-      fillColor: [240, 240, 240],
-      textColor: 0,
-      fontStyle: 'bold'
+    didDrawPage: (data) => {
+        // Footer
+        doc.setFontSize(10);
+        doc.text(`Total Expenses: KES ${totalExpenses.toFixed(2)}`, data.settings.margin.left, doc.internal.pageSize.height - 10);
     }
   });
 
