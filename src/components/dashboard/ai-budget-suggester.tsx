@@ -14,7 +14,7 @@ interface AiBudgetSuggesterProps {
   expenses: Expense[];
   income: number;
 }
-
+//colors for the pie chart
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#ff4d4d'];
 
 export function AiBudgetSuggester({ expenses, income }: AiBudgetSuggesterProps) {

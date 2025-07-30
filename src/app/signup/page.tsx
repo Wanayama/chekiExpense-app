@@ -46,7 +46,7 @@ export default function SignupPage() {
     } finally {
         setIsLoading(false)
     }
-  }
+  };
 
   return (
     <Card>

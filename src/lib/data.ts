@@ -1,3 +1,4 @@
+
 import type { Expense, Category } from '@/lib/types';
 import { ShoppingCart, Utensils, Home, Car, Shirt, Clapperboard, Fuel, Plane, HeartPulse, Dumbbell } from 'lucide-react';
 

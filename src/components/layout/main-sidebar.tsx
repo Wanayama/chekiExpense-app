@@ -45,6 +45,7 @@ export function MainSidebar() {
       icon: Settings,
     },
   ];
+  
 
   return (
     <Sidebar>
