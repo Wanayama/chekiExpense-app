@@ -1,3 +1,4 @@
+
 import type { Expense } from './types';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
